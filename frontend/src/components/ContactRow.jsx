@@ -1,12 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../api";
 import EditContactModal from "./EditContactModal";
 
 export default function ContactRow({ contact, onDelete }) {
-  const [showEdit, setShowEdit] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   const remove = async () => {
-    await axios.delete(`http://localhost:5000/api/contacts/${contact._id}`);
+    await API.delete(`/contacts/${contact._id}`);
     onDelete();
   };
 
@@ -18,7 +18,7 @@ export default function ContactRow({ contact, onDelete }) {
         <span>{contact.phone}</span>
 
         <div className="row-actions">
-          <button className="edit" onClick={() => setShowEdit(true)}>
+          <button className="edit" onClick={() => setEdit(true)}>
             Edit
           </button>
           <button className="delete" onClick={remove}>
@@ -27,10 +27,10 @@ export default function ContactRow({ contact, onDelete }) {
         </div>
       </div>
 
-      {showEdit && (
+      {edit && (
         <EditContactModal
           contact={contact}
-          onClose={() => setShowEdit(false)}
+          onClose={() => setEdit(false)}
           onUpdate={onDelete}
         />
       )}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../api";
 
 export default function ContactForm() {
   const [form, setForm] = useState({
@@ -18,11 +18,10 @@ export default function ContactForm() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const submit = async (e) => {
-    e.preventDefault();
-    await axios.post("http://localhost:5000/api/contacts", form);
+  const submit = async () => {
+    await API.post("/contacts", form);
     setForm({ name: "", email: "", phone: "", message: "" });
-    setSuccess("Contact saved successfully!");
+    setSuccess("Contact saved successfully");
   };
 
   return (
@@ -30,14 +29,14 @@ export default function ContactForm() {
       <div className="form-header">
         <h2>Create Contact</h2>
         <button disabled={!isValid} onClick={submit}>
-          Save Contact
+          Save
         </button>
       </div>
 
       <div className="form-grid">
-        <input name="name" placeholder="Name *" value={form.name} onChange={handleChange} />
+        <input name="name" placeholder="Name*" value={form.name} onChange={handleChange} />
         <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-        <input name="phone" placeholder="Phone *" value={form.phone} onChange={handleChange} />
+        <input name="phone" placeholder="Phone*" value={form.phone} onChange={handleChange} />
         <textarea name="message" placeholder="Message" value={form.message} onChange={handleChange} />
       </div>
 

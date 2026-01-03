@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../api";
 import ContactGrid from "../components/ContactGrid";
 
 export default function SavedContacts() {
@@ -7,7 +7,7 @@ export default function SavedContacts() {
   const [search, setSearch] = useState("");
 
   const fetchContacts = async () => {
-    const res = await axios.get("http://localhost:5000/api/contacts");
+    const res = await API.get("/contacts");
     setContacts(res.data);
   };
 
@@ -15,8 +15,7 @@ export default function SavedContacts() {
     fetchContacts();
   }, []);
 
-  // 🔍 Filter logic
-  const filteredContacts = contacts.filter((c) =>
+  const filtered = contacts.filter((c) =>
     `${c.name} ${c.email} ${c.phone}`
       .toLowerCase()
       .includes(search.toLowerCase())
@@ -26,20 +25,15 @@ export default function SavedContacts() {
     <main className="content">
       <div className="saved-header">
         <h2>Saved Contacts</h2>
-
         <input
           className="search-input"
-          type="text"
           placeholder="Search by name, email or phone..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
-      <ContactGrid
-        contacts={filteredContacts}
-        onDelete={fetchContacts}
-      />
+      <ContactGrid contacts={filtered} onDelete={fetchContacts} />
     </main>
   );
 }
